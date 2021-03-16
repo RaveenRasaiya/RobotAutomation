@@ -1,6 +1,8 @@
 *** Settings ***
 Library     RequestsLibrary
 Library     Collections
+Library     OS
+Library     JSONLibrary
 
 *** Variables ***
 ${BaseUrl}  https://jsonplaceholder.typicode.com
@@ -32,7 +34,4 @@ I want to create new post
     Log To Console  ${response.status_code} 
     ${content}=     Convert to String   ${response.content} 
     Should Contain  ${content}  id  
-
-
-
-
+   
