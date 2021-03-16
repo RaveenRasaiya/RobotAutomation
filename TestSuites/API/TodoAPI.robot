@@ -1,5 +1,6 @@
 *** Settings ***
 Library     RequestsLibrary
+Library     Collections
 
 *** Variables ***
 ${BaseUrl}  https://jsonplaceholder.typicode.com
@@ -15,3 +16,23 @@ I want to todo data from todo
     #Validation    
     ${StatusCode}=  Convert To String  ${response.status_code}   
     Should Be Equal     ${StatusCode}  200
+
+    ${contentTypeValue}=    Get From Dictionary  ${response.headers}  Content-Type
+
+    Should Be Equal  ${contentTypeValue}  application/json; charset=utf-8
+
+
+I want to create new post
+    create session  mysession   ${BaseUrl}
+    ${body}=    Create Dictionary  name=Raveen  email=test@gmail
+    ${header}=  Create Dictionary  Content-Type=application/json
+    ${response}=    post request    mysession   /posts  data=${body}    headers=${header} 
+    ${responseCode}=    Convert To String  ${response.status_code}
+    Should be equal     ${responseCode}     201
+    Log To Console  ${response.status_code} 
+    ${content}=     Convert to String   ${response.content} 
+    Should Contain  ${content}  id  
+
+
+
+
